@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="ngSearchGram">
+<head>
+  <title>ngSearchGram</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="bower_components/angular-messages/angular-messages.js"></script>
+  <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <script type="text/ng-template" id="error-messages">
+    <p ng-message="required">keyword is required.</p>
+    <p ng-message="minlength">keyword is too short.</p>
+    <p ng-message="maxlength">keyword is too long.</p>
+  </script>
+</head>
+<body >
+<div class="container" ng-controller="ngSearchController">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <img class="logo" src="ng-instagram.png" height="117" width="334">
+    </div>
+    <div class="col-md-12 text-center blank-row">
+      <div class="centered">
+        <form  class="form-inline" name="keywordForm" ng-submit="searchImages()"  novalidate>
+          <div class="form-group">
+            <input class="form-control" type="text"
+              name="inputKeyword"
+              ng-model="keyword"
+              placeholder="enter keyword to search"
+              ng-minlength="3"
+              autocomplete="off"
+              autofocus
+              required>
+          </div>
+          <div class="form-group">
+             <input type="submit" class="btn btn-default" name ="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+      <div class="status-bar text-center">
+        <!-- messages and count if successful in count-->
+          <div class="help-block"
+              ng-show ="interacted(keywordForm.inputKeyword)"
+              ng-messages ="keywordForm.inputKeyword.$error">
+              <div ng-messages-include="error-messages"></div>
+          </div>
+          <div class="status-messages">
+            {{statusMessage}}
+          </div>
+      </div>
+      <div class="content">
+        <!--Images go here.....-->
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
