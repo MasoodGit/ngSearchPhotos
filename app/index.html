@@ -51,6 +51,11 @@
       </div>
       <div class="content">
         <!--Images go here.....-->
+        <div >
+          <a ng-href="{{image.link}}" ng-repeat="image in images">
+            <img ng-src="{{image.images.low_resolution.url}}">
+          </a>
+        </div>
       </div>
     </div>
   </div>
