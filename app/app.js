@@ -31,8 +31,8 @@ function InstaGramAPI() {
        }
     })
     .error(function() {
-    //do something here
-    errorCallbackFunc('Unable to load images, Please refresh the page');
+        //display error message
+        errorCallbackFunc('Unable to load images, Please refresh the page');
   });
 
   };
@@ -56,12 +56,17 @@ var errorHandler = function(error) {
     console.log('Error occured...',error);
 
     if (typeof error === 'object') {
-      self.errorMessage('Can not retrieve all the places. Please reload the page.');
+      $scope.statusMessage= 'Can not retrieve all the places. Please reload the page.';
     }
     else if (typeof error === 'string') {
-      self.errorMessage(error);
+      $scope.statusMessage = error;
     }
   }
+};
+
+$scope.clearPhotos = function () {
+  $scope.images = null;
+  $scope.statusMessage = "";
 };
 
 $scope.searchImages = function() {
@@ -75,7 +80,7 @@ $scope.searchImages = function() {
     var instaGramApi = new InstaGramAPI();
     instaGramApi.getImages(searchKeyword,function(data){
       $scope.images = data;
-      $scope.imageCount = data.length;
+      $scope.statusMessage = "We found " + data.length + " results for "  + searchKeyword;
     },errorHandler);
   }
 };
