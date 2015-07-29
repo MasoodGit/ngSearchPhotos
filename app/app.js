@@ -20,7 +20,12 @@ function InstaGramAPI() {
 
   this.getImages = function(tagToSearch,successCallbackFunc,errorCallbackFunc) {
     var endpoint = baseUrl.replace(/{tag}/g,tagToSearch);
-    $http.jsonp(endpoint, config)
+    //$http.jsonp(endpoint, config)
+      $http({
+        method: 'JSONP',
+        url : endpoint,
+        params : config.params
+      })
       .success(function(result) {
         if(result.meta.code == 200) {
           successCallbackFunc(result.data);
