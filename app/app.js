@@ -1,93 +1,68 @@
-angular.module('ngSearchGram', ['ngMessages'])
-.controller('ngSearchController',function($scope,$http) {
+//Create the ngApp - ngSearchGram
+var ngSearchGram = angular.module('ngSearchGram', ['ngMessages']);
 
+//Create ngSearchController
+ngSearchGram.controller('ngSearchController',ngSearchControllerFunc);
 
+/*
+ * ngSearchController function, takes $scope and instaGramAPI service
+ * as dependency
+ */
+function ngSearchControllerFunc($scope,instaGramAPI) {
+  /*
+   * scope variable to tag search
+   */
+  $scope.keyword = "";
 
-function InstaGramAPI() {
+  /*
+   * statusMessage , displays
+   * messages in the status bar
+   */
+  $scope.statusMessage ="";
 
-  var baseUrl = "https://api.instagram.com/v1/tags/{tag}/media/recent";
-  var clientId = "d2406ec1a54649a4a9778cf5f5be1e1d";
+  /*
+   * triggers field validation if form is
+   * submitted or if the field is blured
+   */
+  $scope.interacted = function(field) {
+    return $scope.keywordForm.$submitted || field.$touched;
+  };
 
-
-  var config = {
-    'params' : {
-        'client_id' : clientId,
-        'count' : 20,
-        'callback' : 'JSON_CALLBACK'
+  /*
+   * Generic error handler , used when interacting
+   * with the instagramAPI
+   */
+  var errorHandler = function(error) {
+    $scope.isLoading = false;
+    $scope.isErrored = true;
+    if (error) {
+      console.log('Error occured...',error);
+      if (typeof error === 'object') {
+        $scope.statusMessage= 'Can not retrieve all the places. Please reload the page.';
+      }
+      else if (typeof error === 'string') {
+        $scope.statusMessage = error;
+      }
     }
   };
 
-
-  this.getImages = function(tagToSearch,successCallbackFunc,errorCallbackFunc) {
-    var endpoint = baseUrl.replace(/{tag}/g,tagToSearch);
-    //$http.jsonp(endpoint, config)
-      $http({
-        method: 'JSONP',
-        url : endpoint,
-        params : config.params
-      })
-      .success(function(result) {
-        if(result.meta.code == 200) {
-          successCallbackFunc(result.data);
-        }
-        else  {
-          console.log(result.meta.error_type);
-          errorCallbackFunc({errorType: meta.error_type,code:meta.code,errorMessage:meta.error_message});
-       }
-    })
-    .error(function() {
-        //display error message
-        errorCallbackFunc('Unable to load images, Please refresh the page');
-  });
-
+  /*
+   * Invokes instagramAPI to search for the
+   * tag the user has entered.
+   */
+  $scope.searchImages = function() {
+    if($scope.keywordForm.$valid) {
+      var searchKeyword = $scope.keyword;
+      $scope.statusMessage = "Searching Instagram for photos tagged with " + searchKeyword;
+      $scope.keywordForm.$setUntouched();
+      $scope.keyword = "";
+      $scope.keywordForm.$setPristine();
+      //make call to the instagram api
+      instaGramAPI.getImages(searchKeyword,function(data){
+        $scope.images = data;
+        $scope.statusMessage = "We found " + data.length + " results for "  + searchKeyword;
+      },errorHandler);
+    }
   };
+
 }
-
-
-$scope.keyword = "";
-$scope.statusMessage ="";
-$scope.errorMessag="";
-$scope.isLoading = false;
-$scope.isErrored = false;
-
-$scope.interacted = function(field) {
-  return $scope.keywordForm.$submitted || field.$touched;
-};
-
-var errorHandler = function(error) {
-  $scope.isLoading = false;
-  $scope.isErrored = true;
-  if (error) {
-    console.log('Error occured...',error);
-
-    if (typeof error === 'object') {
-      $scope.statusMessage= 'Can not retrieve all the places. Please reload the page.';
-    }
-    else if (typeof error === 'string') {
-      $scope.statusMessage = error;
-    }
-  }
-};
-
-$scope.clearPhotos = function () {
-  $scope.images = null;
-  $scope.statusMessage = "";
-};
-
-$scope.searchImages = function() {
-  //make call to the instagram api
-  if($scope.keywordForm.$valid) {
-    var searchKeyword = $scope.keyword;
-    $scope.statusMessage = "Searching Instagram for photos tagged with " + searchKeyword;
-    $scope.keywordForm.$setUntouched();
-    $scope.keyword = "";
-    $scope.keywordForm.$setPristine();
-    var instaGramApi = new InstaGramAPI();
-    instaGramApi.getImages(searchKeyword,function(data){
-      $scope.images = data;
-      $scope.statusMessage = "We found " + data.length + " results for "  + searchKeyword;
-    },errorHandler);
-  }
-};
-
-});

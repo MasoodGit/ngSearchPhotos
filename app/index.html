@@ -7,7 +7,11 @@
   <script type="text/javascript" src="bower_components/angular/angular.js"></script>
   <script type="text/javascript" src="bower_components/angular-messages/angular-messages.js"></script>
   <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+
   <script type="text/javascript" src="app.js"></script>
+ <script type="text/javascript" src="InstaGramAPIService.js"></script>
+  <!-- <script type="text/javascript" src="instagramAPIFactory.js"></script> -->
+
   <script type="text/ng-template" id="error-messages">
     <p class="error-messages"  ng-message="required">tag is required.</p>
     <p class="error-messages"  ng-message="pattern">enter a tag word to search</p>
@@ -27,8 +31,8 @@
               name="inputKeyword"
               ng-model="keyword"
               placeholder="Enter a tag  to search"
-              ng-maxlength="15"
               ng-pattern="/^[a-zA-Z0-9_]*$/"
+              ng-maxlength="15"
               autocomplete="off"
               autofocus
               required>
@@ -40,11 +44,11 @@
       </div>
       <div class="status-bar text-center">
         <!-- messages and count if successful in count-->
-          <div class="help-block"
+          <span class="help-block"
               ng-show ="interacted(keywordForm.inputKeyword)"
               ng-messages ="keywordForm.inputKeyword.$error">
-              <div ng-messages-include="error-messages" ></div>
-          </div>
+              <span ng-messages-include="error-messages" ></span>
+          </span>
           <div class="status-messages">
             {{statusMessage}}
           </div>
