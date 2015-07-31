@@ -7,18 +7,23 @@
 }
 
 .status-messages {
-  padding-top: 10px;
+  padding: 10px;
+  color: blue;
+  font-weight: bold;
 }
 
 .content {
 
 }
 
-.help-block {
-  margin:0;
+.message-block {
+  display: block;
 }
+
 .error-messages {
   color : red;
+  height: 25px;
+  margin:5px 0;
 }
 
 .status-bar {
@@ -28,5 +33,12 @@
 
 .img-container {
   display: inline-block;
-  margin: 5px;
+  margin: 15px;
+  -webkit-transition: all 0.5s linear;
+  -webkit-transform: scale3d(1,1,1);
+}
+
+.img-container:hover {
+  -webkit-transform: scale3d(1.1,1.1,1.1);
+  z-index: 10;
 }

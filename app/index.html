@@ -9,12 +9,12 @@
   <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
 
   <script type="text/javascript" src="app.js"></script>
- <script type="text/javascript" src="InstaGramAPIService.js"></script>
+  <script type="text/javascript" src="InstaGramAPIService.js"></script>
   <!-- <script type="text/javascript" src="instagramAPIFactory.js"></script> -->
 
   <script type="text/ng-template" id="error-messages">
-    <p class="error-messages"  ng-message="required">tag is required.</p>
-    <p class="error-messages"  ng-message="pattern">enter a tag word to search</p>
+    <p class="error-messages"  ng-message="pattern">enter a proper tag word to search</p>
+    <!-- <p class="error-messages"  ng-message="required">enter a tag word</p> -->
   </script>
 </head>
 <body >
@@ -44,21 +44,22 @@
       </div>
       <div class="status-bar text-center">
         <!-- messages and count if successful in count-->
-          <span class="help-block"
+          <div class="message-block"
               ng-show ="interacted(keywordForm.inputKeyword)"
               ng-messages ="keywordForm.inputKeyword.$error">
-              <span ng-messages-include="error-messages" ></span>
-          </span>
+              <div ng-messages-include="error-messages" ></div>
+          </div>
           <div class="status-messages">
             {{statusMessage}}
           </div>
       </div>
+      <div class="preloader" ng-show="isFetchingImages">
+        <img src="preloader.gif" height="64" width="60">
+      </div>
       <div class="content">
         <!--Images go here.....-->
-        <div>
-          <div class="img-container" ng-repeat="image in images">
-            <img ng-src="{{image.images.low_resolution.url}}">
-          </div>
+        <div ng-if="isFetchingImagesCompleted">
+            <img class="img-container" ng-src="{{ url }}" ng-repeat="(url,imgElement) in images">
         </div>
       </div>
     </div>
