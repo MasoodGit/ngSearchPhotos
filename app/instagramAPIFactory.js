@@ -1,6 +1,6 @@
 ngSearchGram
 .factory("instaGramAPI",function($http) {
- return function() {
+
     var baseUrl = "https://api.instagram.com/v1/tags/{tag}/media/recent";
     var clientId = "d2406ec1a54649a4a9778cf5f5be1e1d";
     var config = {
@@ -10,7 +10,8 @@ ngSearchGram
         'callback' : 'JSON_CALLBACK'
       }
     };
-    this.getImages = function(tagToSearch,successCallbackFunc,errorCallbackFunc) {
+    return {
+    getImages : function(tagToSearch,successCallbackFunc,errorCallbackFunc) {
       var endpoint = baseUrl.replace(/{tag}/g,tagToSearch);
         //$http.jsonp(endpoint, config)
         $http({
@@ -31,7 +32,8 @@ ngSearchGram
             //display error message
             errorCallbackFunc('Unable to load images, Please refresh the page');
           });
-      };
+      }
     };
+
   }
 );
